@@ -12,11 +12,11 @@ import { promises as fs } from "fs";
 const db = new Kysely({
   dialect: new PostgresDialect({
     pool: new Pool({
-      host: "localhost",
-      database: "nero",
-      user: "user",
-      password: "pass",
-      port: 5432,
+      host: Bun.env.DB_HOST,
+      database: Bun.env.DB_NAME,
+      user: Bun.env.DB_USER,
+      password: Bun.env.DB_PASSWORD,
+      port: Bun.env.DB_PORT,
     }),
   }),
 });
@@ -37,4 +37,54 @@ const migrator = new Migrator({
   }),
 });
 
-await migrator.migrateToLatest();
+const migrateAll = async () => {
+  const { error, results } = await migrator.migrateToLatest();
+
+  results?.forEach((it) => {
+    if (it.status === "Success") {
+      console.log(`migration "${it.migrationName}" was executed successfully`);
+    } else if (it.status === "Error") {
+      console.error(`failed to execute migration "${it.migrationName}"`);
+    }
+  });
+
+  if (error) {
+    console.error("failed to migrate");
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+const revertLastMigration = async () => {
+  const { error, results } = await migrator.migrateDown();
+
+  results?.forEach((it) => {
+    if (it.status === "Success") {
+      console.log(`migration "${it.migrationName}" was reverted successfully`);
+    } else if (it.status === "Error") {
+      console.error(`failed to revert migration "${it.migrationName}"`);
+    }
+  });
+
+  if (error) {
+    console.error("failed to revert migration");
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+console.log(Bun.argv);
+
+const acceptedArguments = {
+  DOWN: "--down",
+} as const;
+
+const [_, __, ...args] = Bun.argv;
+
+if (args.includes(acceptedArguments.DOWN)) {
+  await revertLastMigration();
+} else {
+  await migrateAll();
+}
+
+await db.destroy();
