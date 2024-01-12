@@ -73,18 +73,20 @@ const revertLastMigration = async () => {
   }
 };
 
-console.log(Bun.argv);
-
 const acceptedArguments = {
   DOWN: "--down",
 } as const;
 
 const [_, __, ...args] = Bun.argv;
 
-if (args.includes(acceptedArguments.DOWN)) {
-  await revertLastMigration();
-} else {
-  await migrateAll();
-}
+const getMigrationHandler = (args: string[]) => {
+  if (args.includes(acceptedArguments.DOWN)) {
+    return revertLastMigration;
+  }
+
+  return migrateAll;
+};
+
+await getMigrationHandler(args)();
 
 await db.destroy();
