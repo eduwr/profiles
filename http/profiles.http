@@ -1,0 +1,16 @@
+GET http://localhost:3000/profiles
+
+### Create Profile NOT WOKING IDK WHY
+POST http://localhost:3000/profiles
+Content-Type: application/json
+
+{
+      "bio": "random bio",
+      "email": "some email",
+      "firstName": "John",
+      "lastName": "Dean"
+}
+### Delete Profile
+DELETE  http://localhost:3000/profiles/818c0ae6-fe8a-49a6-b3d3-e87ce04202ad
+
+ 

@@ -1,11 +1,9 @@
 import { Elysia } from "elysia";
-import { ProfileController } from "./profile/profile.controller";
+import { profileRoutes } from "./profile/profile.controller";
 
-
-const profileController = new ProfileController()
 const app = new Elysia()
   .get("/", () => "Hello Elysia")
-  .get("/profile", profileController.getProfiles)
+  .use(profileRoutes)
   .listen(3000);
 
 console.log(
