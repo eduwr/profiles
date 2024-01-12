@@ -6,10 +6,10 @@ import {
 } from "kysely";
 import path from "path";
 import { Pool } from "pg";
-
+import { DB } from "kysely-codegen";
 import { promises as fs } from "fs";
 
-const db = new Kysely({
+const db = new Kysely<DB>({
   dialect: new PostgresDialect({
     pool: new Pool({
       host: Bun.env.DB_HOST,

@@ -5,7 +5,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
     "migrate": "bun run scripts/migrate.ts",
-    "migrate:undo": "bun run scripts/migrate.ts --down"
+    "migrate:undo": "bun run scripts/migrate.ts --down",
+    "kysely:generate": "bun kysely-codegen"
   },
   "dependencies": {
     "elysia": "latest",
