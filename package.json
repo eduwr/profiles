@@ -3,14 +3,18 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "migrate": "bun run scripts/migrate.ts"
   },
   "dependencies": {
     "elysia": "latest",
-    "kysely": "^0.27.2"
+    "kysely": "^0.27.2",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "@types/pg": "^8.10.9",
+    "bun-types": "latest",
+    "kysely-codegen": "^0.11.0"
   },
   "module": "src/index.js"
 }
