@@ -1,25 +1,19 @@
-import Elysia, { t } from "elysia";
 import { ProfileService } from "./profile.service";
+import { CreateProfileBody } from "./profile.routes";
 
-const service = new ProfileService();
+export class ProfileController {
+  constructor(private profileService: ProfileService) {}
 
-// TODO: those are the routes, not the controller, refactor part of the code to the controller to add more validations
-export const profileRoutes = new Elysia({ prefix: "/profiles" })
-  .get("", service.getProfiles)
-  .post(
-    "",
-    ({ body }) => service.createProfile(body),
-    {
-      body: t.Object({
-        bio: t.String(),
-        email: t.String(),
-        firstName: t.String(),
-        lastName: t.String(),
-      }),
-    }
-  )
-  .delete("/:id", ({ params: { id } }) => service.deleteProfile({ id }), {
-    params: t.Object({
-      id: t.String(),
-    }),
-  });
+  async index() {
+    return this.profileService.getProfiles();
+  }
+
+  async create(body: CreateProfileBody) {
+    const bio = body.bio ?? null;
+    return this.profileService.createProfile({ ...body, bio });
+  }
+
+  async delete(id: string) {
+    return this.profileService.deleteProfile({ id });
+  }
+}

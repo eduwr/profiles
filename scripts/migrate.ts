@@ -12,11 +12,7 @@ import { promises as fs } from "fs";
 const db = new Kysely<DB>({
   dialect: new PostgresDialect({
     pool: new Pool({
-      host: Bun.env.DB_HOST,
-      database: Bun.env.DB_NAME,
-      user: Bun.env.DB_USER,
-      password: Bun.env.DB_PASSWORD,
-      port: Bun.env.DB_PORT,
+      connectionString: Bun.env.DATABASE_URL,
     }),
   }),
 });
